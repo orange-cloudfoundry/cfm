@@ -3,6 +3,37 @@
 cfm is the small utility which wrap [cloud foundry cli](https://github.com/cloudfoundry/cli) to be able to run same command on 
 multiple cloud foundry.
 
+## Installation
+
+### On *nix system
+
+You can install this via the command-line with either `curl` or `wget`.
+
+#### via curl
+
+```bash
+$ sh -c "$(curl -fsSL https://raw.github.com/orange-cloudfoundry/cfm/master/bin/install.sh)"
+```
+
+#### via wget
+
+```bash
+$ sh -c "$(wget https://raw.github.com/orange-cloudfoundry/cfm/master/bin/install.sh -O -)"
+```
+
+### On windows
+
+You can install it by downloading the `.exe` corresponding to your cpu from releases page: https://github.com/orange-cloudfoundry/cfm/releases .
+Alternatively, if you have terminal interpreting shell you can also use command line script above, it will download file in your current working dir.
+
+### From go command line
+
+Simply run in terminal:
+
+```bash
+$ go get github.com/orange-cloudfoundry/cfm
+```
+
 ## Usage
 
 ### prerequisite
