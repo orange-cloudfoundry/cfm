@@ -8,11 +8,6 @@ import (
 	"strings"
 )
 
-type Target struct {
-	Api   string
-	Alias string
-}
-
 func (t Target) String() string {
 	if t.Alias != "" {
 		return t.Alias
@@ -52,22 +47,78 @@ func convertToFolder(target Target) string {
 	return filepath.Join(cfmHome(), targetApi)
 }
 
-func findTargets() []Target {
+func findAllTargets() []Target {
 	b, err := ioutil.ReadFile(filepath.Join(cfmHome(), configFile))
 	if err != nil {
 		return []Target{}
 	}
-	var targets []Target
+	var config Config
 
-	err = json.Unmarshal(b, &targets)
+	err = json.Unmarshal(b, &config)
 	if err != nil {
 		return []Target{}
 	}
-	return targets
+	return config.Targets
+}
+
+func findTargets() []Target {
+	targets := findAllTargets()
+	group := getGroup()
+	finalTargets := make([]Target, 0)
+	for _, t := range targets {
+		if t.Group == group {
+			finalTargets = append(finalTargets, t)
+		}
+	}
+	return finalTargets
+}
+
+func getGroup() string {
+	b, err := ioutil.ReadFile(filepath.Join(cfmHome(), configFile))
+	if err != nil {
+		return ""
+	}
+	var config Config
+
+	err = json.Unmarshal(b, &config)
+	if err != nil {
+		return ""
+	}
+
+	return config.CurrentGroup
+}
+
+func setGroup(group string) error {
+	b, err := ioutil.ReadFile(filepath.Join(cfmHome(), configFile))
+	if err != nil {
+		return err
+	}
+	var config Config
+
+	err = json.Unmarshal(b, &config)
+	if err != nil {
+		return err
+	}
+
+	b, err = json.MarshalIndent(Config{
+		CurrentGroup: group,
+		Targets:      config.Targets,
+	}, "", "\t")
+	if err != nil {
+		return err
+	}
+	err = ioutil.WriteFile(filepath.Join(cfmHome(), configFile), b, 0644)
+	if err != nil {
+		return err
+	}
+	return nil
 }
 
 func storeTargets(targets []Target) error {
-	b, err := json.MarshalIndent(targets, "", "\t")
+	b, err := json.MarshalIndent(Config{
+		CurrentGroup: getGroup(),
+		Targets:      targets,
+	}, "", "\t")
 	if err != nil {
 		return err
 	}

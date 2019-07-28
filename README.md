@@ -90,3 +90,17 @@ Help Options:
 Example: `cfm set-cf-env -a mycf`
 
 You can now perform command with normal `cf` cli.
+
+### Use groups
+
+You can group your target to perform command only on this group.
+
+First you will need to add target with a group name:
+
+`cfm add-target -t https://api.my.cloudfoundry.com -a mycf -g prod`
+
+You have no to target this group to do so use `set-group` command:
+
+`cfm set-group -g prod`
+
+you can clear the group target by call set-group without name: `cfm set-group`

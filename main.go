@@ -44,7 +44,7 @@ func main() {
 	}
 	if err != nil {
 		errFlag, ok := err.(*flags.Error)
-		if ok && errFlag.Type != flags.ErrUnknownCommand && errFlag.Type != flags.ErrUnknownFlag {
+		if !ok || errFlag.Type != flags.ErrUnknownCommand && errFlag.Type != flags.ErrUnknownFlag {
 			if os.Args[1] == "--help" || os.Args[1] == "-h" {
 				help()
 				fmt.Println(err.Error())
@@ -52,7 +52,6 @@ func main() {
 			}
 			messages.Fatal(err.Error())
 		}
-		messages.Fatal(err.Error())
 	}
 
 	if os.Args[1] == "--help" || os.Args[1] == "-h" {

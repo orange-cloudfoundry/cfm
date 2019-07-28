@@ -10,16 +10,21 @@ import (
 
 type SetEnvCmd struct {
 	Target string `long:"target" short:"t" description:"Cloud foundry target"`
-	Alias  string `long:"alias" short:"a" description:"set an alias to the target"`
+	Alias  string `long:"alias" short:"a" description:"alias of the target to use"`
+	Group  string `long:"group" short:"g" description:"the group of targets to use"`
 }
 
 var setEnvCmd SetEnvCmd
 
 func (c *SetEnvCmd) Execute(_ []string) error {
-	targets := findTargets()
+	targets := findAllTargets()
+	group := c.Group
+	if group == "" {
+		group = getGroup()
+	}
 	var target Target
 	for _, t := range targets {
-		if t.Api == c.Target || t.Alias == c.Alias {
+		if (t.Api == c.Target || t.Alias == c.Alias) && t.Group == group {
 			target = t
 			break
 		}
