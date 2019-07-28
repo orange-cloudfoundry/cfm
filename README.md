@@ -58,6 +58,31 @@ Help Options:
 
 Example: `cfm add-target -t https://api.my.cloudfoundry.com -a mycf`
 
+
+you can now perform a multi-login to log on each platform:
+
+```
+cfm [OPTIONS] multi-login [multi-login-OPTIONS]
+
+perform login on all targets
+
+Application Options:
+  -h, --help
+
+Help Options:
+  -h, --help                     Show this help message
+
+[multi-login command options]
+      -a=                        api
+      -u=                        username
+      -p=                        password
+      -o=                        org
+      -s=                        s
+          --skip-ssl-validation  skip-ssl-validation
+```
+
+example: `cfm multi-login -u $CF_USERNAME -p $CF_PASSWORD`
+
 ### Run cf command
 
 simply call cfm with cf valid arguments and the command will be called on each targets, example for see each orgs on targets:
